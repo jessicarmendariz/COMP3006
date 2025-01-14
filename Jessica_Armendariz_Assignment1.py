@@ -132,3 +132,282 @@
 # Rewrite the Tent, Hammock and Tarp classes taking into account the changes brought on by using
 # the Shelter parent class. Changes will be needed to the constructor, __lt__ and the removal of
 # the method is_better.
+
+
+
+
+
+
+
+
+
+
+#Question 1
+#List of Strings (Names)
+names = ['Adan', 'Brisa', 'Carly', 'Diane', 'Eddie', 'Grandma', 'Ivy']
+#List of Integers (Ages)
+ages = [46, 21, 29, 60, 40, 71, 2]
+
+#Function to combine Names List and Age List into Tuples
+def paired_list(names, ages):
+    #- This function takes two lists and combines them into one list and returns it. 
+    #- Args: List Names - Strings and List Ages - Integers
+    #- Returns: Returns Tuples of Names and Ages together in a List
+    paired = list(zip(names, ages))
+    return paired
+
+result = paired_list(names, ages)
+print(result)
+
+#Function to calculate the Average Age in the List of Ages - Integers
+def calculate_average(integers):
+    #- This function calculates the average of the Integers in the Ages List
+    #- Args: List Ages - Integers
+    #- Returns: Returns the Average of the Integers as an Integer (Note: integer division rounds down)
+    if len(integers) == 0:
+        return 0
+    return sum(integers) // len(integers)
+
+average = calculate_average(ages)
+print(f"The average age is {average}.")
+
+
+
+#Question 2
+#Function to take a List of Tuples abd filter based on Even or Odd
+def even_odd_pairs(paired_list, filter_even=True):
+    #- This function takes a List of Tuples abd filter based on Even or Odd
+    #- Args: paired_list: List of Tuples (name, age) - Strings and Integers
+    #- Returns: Returns List of Tuples - Integers
+    if filter_even:
+        #Filter for Even Ages - Integers
+        return [pair for pair in paired_list if pair[1] % 2 == 0]
+    else:
+        #Filter for Odd Ages - Integers
+        return [pair for pair in paired_list if pair[1] % 2 != 0]
+    
+even_pairs = even_odd_pairs(result, filter_even=True)
+odd_pairs = even_odd_pairs(result, filter_even=False)
+print(f"Even Pairs: {even_pairs} Odd Pairs: {odd_pairs}")
+
+
+
+### ----------------------------------------------------------------------------------------- ###
+### We wish to compare and store data on various types of shelters for when we go backpacking ###
+### ----------------------------------------------------------------------------------------- ###
+
+
+
+#Question 3
+#Tent Class that contains the Required Attributes (8)
+class Tent:
+    def __init__(self, num_occupants, material, setup_time, sqft, vestibule, weight, structure_poles=True, seasons=3):
+        self.num_occupants = num_occupants
+        self.material = material
+        self.setup_time = setup_time
+        self.sqft = sqft
+        self.vestibule = vestibule
+        self.weight = weight
+        self.structure_poles = structure_poles
+        self.seasons = seasons
+
+    #Required String Defining Method
+    def __str__(self):
+        return f"Tent for {self.num_occupants} occupants, material: {self.material}, setup time: {self.setup_time} minutes, size: {self.sqft} sqft, weight: {self.weight} oz, seasons: {self.seasons}"
+
+    #Required String Representation Method
+    def __repr__(self):
+        return f"Tent({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, {self.vestibule}, {self.weight}, {self.structure_poles}, {self.seasons})"
+
+    #Required Less Than Method
+    def __lt__(self, other):
+        if isinstance(other, Tent):
+            return self.num_occupants < other.num_occupants and self.sqft < other.sqft
+        return NotImplemented
+
+    #Required Comparison Method
+    def is_better(self, other):
+        if isinstance(other, Tent):
+            return self.weight < other.weight and self.setup_time < other.setup_time and self.seasons >= other.seasons
+        return NotImplemented
+
+#Create Tents
+tent1 = Tent(num_occupants=4, material="polyester", setup_time=6, sqft=36, vestibule=False, weight=12.5, structure_poles=True, seasons=3)
+tent2 = Tent(num_occupants=4, material="polyester", setup_time=5, sqft=35, vestibule=False, weight=11.5, structure_poles=True, seasons=3)
+tent3 = Tent(num_occupants=3, material="polyester", setup_time=4, sqft=35, vestibule=False, weight=11.0, structure_poles=True, seasons=4)
+
+#Testing Less Than Method
+print(f"Tent 1 is < Tent 2: {tent1 < tent2}")
+print(f"Tent 1 is < Tent 2: {tent1 < tent3}")
+print(f"Tent 1 is < Tent 2: {tent2 < tent1}")
+print(f"Tent 1 is < Tent 2: {tent2 < tent3}")
+print(f"Tent 1 is < Tent 2: {tent3 < tent1}")
+print(f"Tent 1 is < Tent 2: {tent3 < tent2}")
+
+#Testing Is Better Method
+print(f"Tent 1 is better than Tent 2: {tent1.is_better(tent2)}")
+print(f"Tent 1 is better than Tent 2: {tent1.is_better(tent3)}")
+print(f"Tent 1 is better than Tent 2: {tent2.is_better(tent1)}")
+print(f"Tent 1 is better than Tent 2: {tent2.is_better(tent3)}")
+print(f"Tent 1 is better than Tent 2: {tent3.is_better(tent1)}")
+print(f"Tent 1 is better than Tent 2: {tent3.is_better(tent2)}")
+
+
+
+#Question 4
+#Hammock Class that contains the Required Attributes (6)
+class Hammock:
+    def __init__(self, num_occupants, material, setup_time, weight, length, seasons=3):
+        self.num_occupants = num_occupants
+        self.material = material
+        self.setup_time = setup_time
+        self.weight = weight
+        self.length = length
+        self.seasons = seasons
+
+    #Required String Defining Method
+    def __str__(self):
+        return f"Hammock for {self.num_occupants} occupants, material: {self.material}, setup time: {self.setup_time} minutes, weight: {self.weight} oz, length: {self.length} feet, seasons: {self.seasons}"
+
+    #Required String Representation Method
+    def __repr__(self):
+        return f"Hammock({self.num_occupants}, {self.material}, {self.setup_time}, {self.weight}, {self.length}, {self.seasons})"
+
+    #Required Less Than Method
+    def __lt__(self, other):
+        if isinstance(other, Hammock):
+            return self.weight < other.weight and self.setup_time < other.setup_time
+        return NotImplemented
+
+    #Required Comparison Method
+    def is_better(self, other):
+        if isinstance(other, Hammock):
+            return self.weight < other.weight and self.setup_time < other.setup_time and self.seasons >= other.seasons
+        return NotImplemented
+
+#Create Hammocks
+hammock1 = Hammock(num_occupants=1, material="nylon", setup_time=8, weight=19.5, length=13, seasons=3)
+hammock2 = Hammock(num_occupants=2, material="polyester", setup_time=12, weight=22.0, length=10, seasons=3)
+hammock3 = Hammock(num_occupants=2, material="nylon", setup_time=13, weight=24.5, length=115, seasons=4)
+
+#Testing Less Than Method
+print(f"Hammock 1 is < Hammock 2: {hammock1 < hammock2}")
+print(f"Hammock 1 is < Hammock 2: {hammock1 < hammock3}")
+print(f"Hammock 1 is < Hammock 2: {hammock2 < hammock1}")
+print(f"Hammock 1 is < Hammock 2: {hammock2 < hammock3}")
+print(f"Hammock 1 is < Hammock 2: {hammock3 < hammock1}")
+print(f"Hammock 1 is < Hammock 2: {hammock3 < hammock2}")
+
+#Testing Is Better Method
+print(f"Hammock 1 is better than Hammock 2: {hammock1.is_better(hammock2)}")
+print(f"Hammock 1 is better than Hammock 2: {hammock1.is_better(hammock3)}")
+print(f"Hammock 1 is better than Hammock 2: {hammock2.is_better(hammock1)}")
+print(f"Hammock 1 is better than Hammock 2: {hammock2.is_better(hammock3)}")
+print(f"Hammock 1 is better than Hammock 2: {hammock3.is_better(hammock1)}")
+print(f"Hammock 1 is better than Hammock 2: {hammock3.is_better(hammock2)}")
+
+
+#Question 5
+#Tarp Class that contains the Required Attributes (6)
+class Tarp:
+    def __init__(self, num_occupants, material, setup_time, sqft, weight, seasons=3):
+        self.num_occupants = num_occupants
+        self.material = material
+        self.setup_time = setup_time
+        self.weight = weight
+        self.sqft = sqft
+        self.seasons = seasons
+
+    #Required String Defining Method
+    def __str__(self):
+        return f"Tarp for {self.num_occupants} occupants, material: {self.material}, setup time: {self.setup_time} minutes, weight: {self.weight} oz, sqft: {self.sqft} sqft, seasons: {self.seasons}"
+
+    #Required String Representation Method
+    def __repr__(self):
+        return f"Tarp({self.num_occupants}, {self.material}, {self.setup_time}, {self.weight}, {self.sqft}, {self.seasons})"
+
+    #Required Less Than Method
+    def __lt__(self, other):
+        if isinstance(other, Tarp):
+            return self.num_occupants < other.num_occupants and self.sqft < other.sqft
+        return NotImplemented
+
+    #Required Comparison Method
+    def is_better(self, other):
+        if isinstance(other, Tarp):
+            return self.weight < other.weight and self.setup_time < other.setup_time and self.seasons >= other.seasons
+        return NotImplemented
+
+#Create Tarps
+tarp1 = Tarp(num_occupants=3, material="canvas", setup_time=25, weight=24.5, sqft=100, seasons=3)
+tarp2 = Tarp(num_occupants=4, material="polyester", setup_time=30, weight=29.0, sqft=105, seasons=3)
+tarp3 = Tarp(num_occupants=5, material="nylon", setup_time=20, weight=18.5, sqft=115, seasons=4)
+
+#Testing Less Than Method
+print(f"Tarp 1 is < Tarp 2: {tarp1 < tarp2}")
+print(f"Tarp 1 is < Tarp 2: {tarp1 < tarp3}")
+print(f"Tarp 1 is < Tarp 2: {tarp2 < tarp1}")
+print(f"Tarp 1 is < Tarp 2: {tarp2 < tarp3}")
+print(f"Tarp 1 is < Tarp 2: {tarp3 < tarp1}")
+print(f"Tarp 1 is < Tarp 2: {tarp3 < tarp2}")
+
+#Testing Is Better Method
+print(f"Tarp 1 is better than Tarp 2: {tarp1.is_better(tarp2)}")
+print(f"Tarp 1 is better than Tarp 2: {tarp1.is_better(tarp3)}")
+print(f"Tarp 1 is better than Tarp 2: {tarp2.is_better(tarp1)}")
+print(f"Tarp 1 is better than Tarp 2: {tarp2.is_better(tarp3)}")
+print(f"Tarp 1 is better than Tarp 2: {tarp3.is_better(tarp1)}")
+print(f"Tarp 1 is better than Tarp 2: {tarp3.is_better(tarp2)}")
+
+
+
+#Tests
+def test_paired_list():
+    #- This test function checks if Empty Lists return an Empty List. 
+    #- Args: List Names - Strings - Empty and List Ages - Integers - Empty
+    #- Returns: Returns an Empty List
+    names_empty = []
+    ages_empty = []
+    expected_output_empty = []
+
+    result_empty = paired_list(names_empty, ages_empty)
+    assert result_empty == expected_output_empty, f"Test Failed: {result_empty}"
+
+    print("The paired_list tests passed!")
+
+def test_calculate_average():
+    #- This test function checks the math for one input
+    #- Args: One Integer
+    #- Returns: The One Integer
+    single_element = [30]
+    expected_output_single = 30  
+    result_single = calculate_average(single_element)
+    assert result_single == expected_output_single, f"Test failed: {result_single}"
+    
+    #- This test function checks the math for Negative Integers
+    #- Args: Negative Integers
+    #- Returns: Returns the Average of the Integers as an Integer (Note: integer division rounds down)
+    negative_values = [-13, -56, -329]
+    expected_output_negative = -133
+    result_negative = calculate_average(negative_values)
+    assert result_negative == expected_output_negative, f"Test failed: {result_negative}"
+
+    print("The calculate_average tests passed!")
+
+def test_even_odd_pairs():
+    #- This test function checks the comparison of Empty Lists
+    #- Args: Args: List Names - Strings - Empty and List Ages - Integers - Empty
+    #- Returns: Returns and Empty List
+    empty_paired_list = []
+    expected_empty = []
+    result_empty = even_odd_pairs(empty_paired_list, filter_even=True)
+    assert result_empty == expected_empty, f"Test failed: Expected {expected_empty}, but got {result_empty}"
+
+    print("The even_odd_pairs test passed!")
+
+#Run Tests
+# if __name__ == '__main__':
+#     test_paired_list()
+#     test_calculate_average()
+#     test_even_odd_pairs()
+
