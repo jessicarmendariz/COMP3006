@@ -15,7 +15,6 @@
 #- All functions should use return statements to return a value, 
 #rather than printing some value, unless the instructions specifically say to print.
 
-
 # Question 1:
 # Write a function called paired_list that takes in two non-empty lists : a list of strings and
 # a list of integers. The function must combine the lists to form a single list and return it.
