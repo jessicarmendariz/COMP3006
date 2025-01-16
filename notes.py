@@ -63,3 +63,9 @@
 
 
 #January 14 - Week 2 - Day 3 (Did Not Attend Class)
+
+
+
+
+
+#January 16 - Week 2 - Day 4
