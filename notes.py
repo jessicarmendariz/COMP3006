@@ -69,3 +69,11 @@
 
 
 #January 16 - Week 2 - Day 4
+
+#private variables - only visible inside the class
+#creating a private variables is two underscores 
+#__private_variable = "This is a private variable"
+
+
+
+
