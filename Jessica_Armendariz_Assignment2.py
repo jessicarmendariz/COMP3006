@@ -5,7 +5,8 @@ Please follow the steps outlined below.
 
 Preparation
 Review the links below that describe the AutoMPG data set that is part of the UCI Machine Learning Repository. 
-This data set consists of 398 records each having nine attributes. Please download the data and save it in a file called auto-mpg.data.txt.
+This data set consists of 398 records each having nine attributes. 
+Please download the data and save it in a file called auto-mpg.data.txt.
 • https://archive.ics.uci.edu/ml/datasets/Auto+MPG
 • https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data
 • https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.names
