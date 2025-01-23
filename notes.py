@@ -77,3 +77,11 @@
 
 
 
+
+#January 21 - Week 3 - Day 5 (Did Not Attend Class)
+
+
+
+
+
+#January 23 - Week 3 - Day 6
