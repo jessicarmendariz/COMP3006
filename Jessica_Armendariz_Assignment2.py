@@ -75,16 +75,15 @@
 from collections import namedtuple
 import csv
 
+
 class AutoMPG:
     def __init__(self, make, model, year, mpg):
         #- Implements a class that represents the attributes that are available for each record in the data set.
         #- Args: Attributes of the Data Set
-        #- Returns: Self
         self.make = make
         self.model = model
         self.year = year
         self.mpg = mpg
-        return self
     
     #Required String Representation Method
     def __repr__(self):
@@ -122,10 +121,8 @@ class AutoMPGData:
     def __init__(self):
         #- Intializes the Object with the Aata and Loads the Aata
         #- Args: Self
-        #- Returns: Self
         self.data = []
         self._load_data()
-        return self
 
     #Required Iterable Method
     def __iter__(self):
@@ -163,9 +160,14 @@ class AutoMPGData:
         #- Opens the file in Read Mode, then Write Mode, Replaces Tabs with Spaces
         #- Args: Self, Raw File, and Clean File
         #- Returns: Clean File
-        with open(original_file, "r") as infile, open(clean_file, "w") as outfile:
-            for line in infile:
-                outfile.write(line.expandtabs())
+        try:
+            with open(original_file, "r") as infile, open(clean_file, "w") as outfile:
+                for line in infile:
+                    outfile.write(line.expandtabs())
+        except PermissionError as e:
+            print(f"Permission error: {e}")
+            print("Ensure you have the necessary permissions to create or write to the file.")
+            raise
 
 if __name__ == "__main__":
     dataset = AutoMPGData()
