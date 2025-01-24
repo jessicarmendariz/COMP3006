@@ -5,8 +5,10 @@
 
 #Preparation
 #Please create a new folder called Assignment3 and place inside it the autompg.py file from assignment 2. 
-#Also create a new module called shelter.py with the code from assignment 1 question 6 (this should have the Shelter, Hammock, Tarp and Tent classes with the appropriate inheritance.).
-#Inside the Assignment3 folder, please create two new Python modules called test_autompg.py and test_shelter.py, taking care to set them up to be useful both as a module and as a program.
+#Also create a new module called shelter.py with the code from assignment 1 question 6.
+#This should have the Shelter, Hammock, Tarp and Tent classes with the appropriate inheritance.
+#Inside the Assignment3 folder, please create two new Python modules called test_autompg.py and test_shelter.py.
+#Take care to set them up to be useful both as a module and as a program.
 
 #Step 1: test_autompg.py
 #In test_autompg.py implement a class called TestAutoMPG that inherits from unittest.TestCase class.
@@ -42,3 +44,100 @@
 
 #Upload
 #Please ZIP the Assignment3 folder containing the autompg.py, test_autompg.py, shelter.py and test_shelter.py files and upload to Canvas.
+
+
+
+
+#Homework 1 Solution to Number 6 (Optional)
+# class Tent:
+#   def __init__(self, num_occupants, material, setup_time, sqft, vestibule, weight, \
+#               structure_poles=True, seasons=3) -> None:
+#     self.num_occupants = num_occupants
+#     self.material = material
+#     self.setup_time = setup_time
+#     self.sqft = sqft
+#     self.vestibule = vestibule
+#     self.weight = weight
+#     self.structure_poles = structure_poles
+#     self.seasons = seasons
+
+#   def __lt__(self, other):
+#     if type(self) == type(other):
+#       return (self.num_occupants < other.num_occupants) and (self.sqft < other.sqft)
+#     return NotImplemented
+
+#   def __str__(self) -> str:
+#      return self.__repr__()
+
+#   def __repr__(self) -> str:
+#      return f"Tent({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, \
+#             {self.vestibule}, {self.weight}, {self.structure_poles}, {self.seasons})"
+  
+#   def is_better(self, other) -> bool:
+#         if type(self) == type(other):
+#           return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
+#             (self.seasons >= other.seasons)
+#         return NotImplemented
+
+# class Hammock:
+#   def __init__(self, num_occupants, material, setup_time, weight, length=11, seasons=3) -> None:
+#     self.num_occupants = num_occupants
+#     self.material = material
+#     self.setup_time = setup_time
+#     self.weight = weight
+#     self.length = length
+#     self.seasons = seasons
+
+#   def __lt__(self, other):
+#     if type(self) == type(other):
+#       return (self.weight < other.weight) and (self.setup_time < other.setup_time)
+    
+#     return NotImplemented
+
+#   def __str__(self) -> str:
+#      return self.__repr__()
+
+#   def __repr__(self) -> str:
+#      return f"Hammock({self.num_occupants}, {self.material}, {self.setup_time}, \
+#             {self.weight}, {self.length}, {self.seasons})"
+  
+#   def is_better(self, other) -> bool:
+#         if type(self) == type(other):
+#           return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
+#             (self.seasons >= other.seasons)
+#         return NotImplemented
+
+# class Tarp:
+#   def __init__(self, num_occupants, material, setup_time, sqft, weight, seasons=3) -> None:
+#     self.num_occupants = num_occupants
+#     self.material = material
+#     self.setup_time = setup_time
+#     self.sqft = sqft
+#     self.weight = weight
+#     self.seasons = seasons
+
+#   def __lt__(self, other):
+#     if type(self) == type(other):
+#       return (self.num_occupants < other.num_occupants) and (self.sqft < other.sqft)
+#     return NotImplemented
+
+#   def __str__(self) -> str:
+#      return self.__repr__()
+
+#   def __repr__(self) -> str:
+#      return f"Tarp({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, \
+#             {self.weight}, {self.seasons})"
+  
+#   def is_better(self, other) -> bool:
+#         if type(self) == type(other):
+#           return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
+#             (self.seasons >= other.seasons)
+#         return NotImplemented
+
+
+
+
+
+# https://archive.ics.uci.edu/ml/datasets/Auto+MPG
+# https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data
+# https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.names
