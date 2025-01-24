@@ -85,3 +85,82 @@
 
 
 #January 23 - Week 3 - Day 6
+
+#Unit testing needs to be imported and formatted correctly based on examples provided
+#Module we need to import for writing unit tests :
+
+# import unittest
+# import CE1_classes
+
+# class TestFunctions(unittest.TestCase):
+#     """
+#     Absolute banger of a DocString here....
+    
+#     All methods MUST start with "test_" in order for Python to recognize
+#     the method as a test.
+#     """
+    
+#     def test_add(self):
+#         """
+#         Tests the add function.
+#         -assertEqual: checks if 2 values are equal
+#         -assertAlmostEqual: checks if 2 values are equal up to 7 decimal points,
+#         hence the "almost" equal part. This is useful when comparing floats
+#         """
+#         print("\nTesting the add function.")
+#         self.assertEqual(CE1_classes.add(5,10), 15)
+#         self.assertAlmostEqual(CE1_classes.add(5.2,1.3), 6.5)
+#         self.assertEqual(CE1_classes.add(5.2,1.3), 6.5)
+#         self.assertEqual(CE1_classes.add(-5,-20), -25)
+#         self.assertEqual(CE1_classes.add(-5,20), 15)
+#         self.assertEqual(CE1_classes.add(0,0), 0)
+
+
+#     def test_subtract(self):
+#         """
+#         Tests the subtract function.
+#         Make sure that the assert statements are checking not just an average case
+#         but also edge cases, like negative values, negative and positive, 0 values
+#         (could even check complex values but I'm keeping it real in this class)
+
+#         ...my apologies for that joke. 
+#         "i" can't help myself sometimes... Apologies again.
+#         I can hear the eye rolls through the screen....
+#         """
+#         print("\nTesting the subtract function.")
+#         self.assertEqual(CE1_classes.subtract(5,10), -5)
+#         self.assertAlmostEqual(CE1_classes.subtract(5.2,1.3), 3.9)
+#         # self.assertAlmostEqual(CE1_classes.subtract(5.2,1.3), 3.9) #does not work
+#         self.assertEqual(CE1_classes.subtract(-5,-20), 15)
+
+
+#     def test_multiply(self):
+#         print("\nTesting the multiply function.")
+#         self.assertEqual(CE1_classes.multiply(5,10), 50)
+
+
+#     def test_divide(self):
+
+#         print("\nTesting the divide function.")
+#         self.assertAlmostEqual(CE1_classes.divide(9, 2), 4.5)
+#         self.assertRaises(ZeroDivisionError, CE1_classes.divide, 10, 0)
+
+#         #This uses a context manager checks that our code raises the ZeroDivisionError
+#         #and we can call our functions as we usually do. (this is equivalent to line 72)
+#         with self.assertRaises(ZeroDivisionError):
+#             CE1_classes.divide(10, 0)
+
+
+
+# # In order to run the unit tests in this file, you must make a call 
+# # to unittest.main() method. Uncomment the next if statement to run the 
+# # unittests above :
+
+# if __name__ == "__main__":
+#     unittest.main()
+
+
+
+
+
+#January 28 - Week 4 - Day 7
