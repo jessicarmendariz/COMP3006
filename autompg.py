@@ -1,101 +1,69 @@
-from collections import namedtuple
-import csv
+import unittest
+import os
+
+from autompg import AutoMPG, AutoMPGData  # Assuming these classes are defined in autompg.py
+
+class TestAutoMPG(unittest.TestCase):
+    #- This CLass is the Test Suite for AutoMPG and Inherits from Unit Test
+
+    #Runs Before All Tests and Instantiates AUtoMPGData and Assigns in to cls.data
+    @classmethod
+    def setUpClass(cls):
+        print("setUpClass")
+        cls.data = AutoMPGData()
+
+    #Runs After All Tests and Deletes the Clean File After Cleaning the Tests
+    @classmethod
+    def tearDownClass(cls):
+        print("tearDownClass")
+        if os.path.exists("auto-mpg.clean.txt"):
+            os.remove("auto-mpg.clean.txt")
+
+    #Runs Before Each Individual Test and Prints for Updates
+    def setUp(self):
+        print("setUp")
+
+    #Runs After Each Individual Test and Prints for Updates
+    def tearDown(self):
+        print("tearDown")
+
+    #Tests teh String Methods and Verifies the Format
+    def test_str(self):
+        print("Executing test_str.")
+        car = AutoMPG("chevrolet", "chevelle malibu", 1970, 18.0)
+        self.assertEqual(
+            str(car),
+            "AutoMPG('chevrolet', 'chevelle malibu', 1970, 18.0)"
+        )
+
+    #Equlaity Test and Verifies Formatting
+    def test_eq(self):
+        print("Executing test_eq.")
+        car1 = AutoMPG("chevrolet", "chevelle malibu", 1970, 18.0)
+        car2 = AutoMPG("chevrolet", "chevelle malibu", 1970, 18.0)
+        car3 = AutoMPG("ford", "mustang", 1968, 16.0)
+        self.assertTrue(car1 == car2)
+        self.assertFalse(car1 == car3)
+
+    #Less Than Comparison
+    def test_lt(self):
+        print("Executing test_lt.")
+        car1 = AutoMPG("chevrolet", "chevelle malibu", 1970, 18.0)
+        car2 = AutoMPG("ford", "mustang", 1968, 16.0)
+        car3 = AutoMPG("toyota", "corolla", 1980, 32.0)
+        self.assertTrue(car2 < car1)  # Assuming __lt__ is based on year or another criteria
+        self.assertFalse(car3 < car1)
+
+    #Tests the Hash Method and Verifies Formatting for Hash Values
+    def test_hash(self):
+        print("Executing test_hash.")
+        car1 = AutoMPG("chevrolet", "chevelle malibu", 1970, 18.0)
+        car2 = AutoMPG("chevrolet", "chevelle malibu", 1970, 18.0)
+        car3 = AutoMPG("ford", "mustang", 1968, 16.0)
+        self.assertEqual(hash(car1), hash(car2))
+        self.assertNotEqual(hash(car1), hash(car3))
 
 
-class AutoMPG:
-    def __init__(self, make, model, year, mpg):
-        #- Implements a class that represents the attributes that are available for each record in the data set.
-        #- Args: Attributes of the Data Set
-        self.make = make
-        self.model = model
-        self.year = year
-        self.mpg = mpg
-    
-    #Required String Representation Method
-    def __repr__(self):
-        return f"AutoMPG(make='{self.make}', model='{self.model}', year={self.year}, mpg={self.mpg})"
-
-    #Required String Defining Method
-    def __str__(self):
-        return f"{self.year} {self.make} {self.model} - {self.mpg} MPG"
-
-    #Required Double Underscore (==) Method
-    def __eq__(self, other):
-        if isinstance(other, AutoMPG):
-            return (
-                self.make == other.make and
-                self.model == other.model and
-                self.year == other.year and
-                self.mpg == other.mpg
-            )
-        return NotImplemented
-
-    #Required Less Than Method
-    def __lt__(self, other):
-        if isinstance(other, AutoMPG):
-            return (
-                (self.make, self.model, self.year, self.mpg) < 
-                (other.make, other.model, other.year, other.mpg)
-            )
-        return NotImplemented
-
-    #Required Hash Method
-    def __hash__(self):
-        return hash((self.make, self.model, self.year, self.mpg))
-
-class AutoMPGData:
-    def __init__(self):
-        #- Intializes the Object with the Aata and Loads the Aata
-        #- Args: Self
-        self.data = []
-        self._load_data()
-
-    #Required Iterable Method
-    def __iter__(self):
-        return iter(self.data)
-
-    def _load_data(self):
-        #- This Method Tries to Open a "Clean File" and if there isn't one, it Creates One Recursively
-        #- Args: Self
-        #- Retruns: Clean File
-        clean_file = "auto-mpg.clean.txt"
-        original_file = "auto-mpg.data.txt"
-        Record = namedtuple("Record", [
-            "mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "model_year", "origin", "car_name"
-        ])
-
-        try:
-            with open(clean_file, "r") as file:
-                reader = csv.reader(file, delimiter=" ", skipinitialspace=True)
-                for row in reader:
-                    row = [col for col in row if col]
-                    if len(row) < 9:
-                        continue
-
-                    record = Record(*row[:8], " ".join(row[8:]))
-                    mpg = float(record.mpg)
-                    year = 1900 + int(record.model_year) if int(record.model_year) >= 70 else 2000 + int(record.model_year)
-                    make, model = record.car_name.split(" ", 1) if " " in record.car_name else (record.car_name, "")
-
-                    self.data.append(AutoMPG(make, model, year, mpg))
-        except FileNotFoundError:
-            self._clean_data(original_file, clean_file)
-            self._load_data()
-
-    def _clean_data(self, original_file, clean_file):
-        #- Opens the file in Read Mode, then Write Mode, Replaces Tabs with Spaces
-        #- Args: Self, Raw File, and Clean File
-        #- Returns: Clean File
-        try:
-            with open(original_file, "r") as infile, open(clean_file, "w") as outfile:
-                for line in infile:
-                    outfile.write(line.expandtabs())
-        except PermissionError as e:
-            print(f"Permission error: {e}")
-            print("Ensure you have the necessary permissions to create or write to the file.")
-            raise
-
+#Run Tests
 if __name__ == "__main__":
-    dataset = AutoMPGData()
-    for car in dataset:
-        print(car)
+    unittest.main()
