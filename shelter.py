@@ -4,87 +4,70 @@
 #• Shelter(num_occupants, material, setup_time, sqft (if applicable), vestibule (if applicable), weight, structure_poles (if applicable), seasons)
 
 
-class Tent:
-  def __init__(self, num_occupants, material, setup_time, sqft, vestibule, weight, \
-              structure_poles=True, seasons=3) -> None:
-    self.num_occupants = num_occupants
-    self.material = material
-    self.setup_time = setup_time
-    self.sqft = sqft
-    self.vestibule = vestibule
-    self.weight = weight
-    self.structure_poles = structure_poles
-    self.seasons = seasons
+#Solution to Optional Question 6 for Homework 1
 
-  def __lt__(self, other):
-    if type(self) == type(other):
-      return (self.num_occupants < other.num_occupants) and (self.sqft < other.sqft)
-    return NotImplemented
+class Shelter:
+    #Base Class Containing Common Attributes and Methods for all Shelter Classes
+    def __init__(self, num_occupants, material, setup_time, weight, seasons=3):
+        self.num_occupants = num_occupants
+        self.material = material
+        self.setup_time = setup_time
+        self.weight = weight
+        self.seasons = seasons
 
-  def __str__(self) -> str:
-     return self.__repr__()
-
-  def __repr__(self) -> str:
-     return f"Tent({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, \
-            {self.vestibule}, {self.weight}, {self.structure_poles}, {self.seasons})"
-  
-  def is_better(self, other) -> bool:
-        if type(self) == type(other):
-          return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
-            (self.seasons >= other.seasons)
+    #Less Than Comparison
+    def __lt__(self, other):
+        if isinstance(other, Shelter):
+            return (self.num_occupants < other.num_occupants) and (self.weight < other.weight)
         return NotImplemented
 
-class Hammock:
-  def __init__(self, num_occupants, material, setup_time, weight, length=11, seasons=3) -> None:
-    self.num_occupants = num_occupants
-    self.material = material
-    self.setup_time = setup_time
-    self.weight = weight
-    self.length = length
-    self.seasons = seasons
-
-  def __lt__(self, other):
-    if type(self) == type(other):
-      return (self.weight < other.weight) and (self.setup_time < other.setup_time)
-    
-    return NotImplemented
-
-  def __str__(self) -> str:
-     return self.__repr__()
-
-  def __repr__(self) -> str:
-     return f"Hammock({self.num_occupants}, {self.material}, {self.setup_time}, \
-            {self.weight}, {self.length}, {self.seasons})"
-  
-  def is_better(self, other) -> bool:
-        if type(self) == type(other):
-          return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
-            (self.seasons >= other.seasons)
+    #Which Shelter is Better Comparison
+    def is_better(self, other) -> bool:
+        if isinstance(other, Shelter):
+            return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
+                   (self.seasons >= other.seasons)
         return NotImplemented
 
-class Tarp:
-  def __init__(self, num_occupants, material, setup_time, sqft, weight, seasons=3) -> None:
-    self.num_occupants = num_occupants
-    self.material = material
-    self.setup_time = setup_time
-    self.sqft = sqft
-    self.weight = weight
-    self.seasons = seasons
+    #Returns a String of the Shelter Object 
+    def __str__(self) -> str:
+        return f"Shelter({self.num_occupants}, {self.material}, {self.setup_time}, {self.weight}, {self.seasons})"
 
-  def __lt__(self, other):
-    if type(self) == type(other):
-      return (self.num_occupants < other.num_occupants) and (self.sqft < other.sqft)
-    return NotImplemented
 
-  def __str__(self) -> str:
-     return self.__repr__()
+class Tent(Shelter):
+    #Tent Class Extends the Shelter Class
+    #Inherits from Shelter
 
-  def __repr__(self) -> str:
-     return f"Tarp({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, \
-            {self.weight}, {self.seasons})"
-  
-  def is_better(self, other) -> bool:
-        if type(self) == type(other):
-          return (self.weight < other.weight) and (self.setup_time < other.setup_time) and \
-            (self.seasons >= other.seasons)
-        return NotImplemented
+    #Initializes Tenbt Object
+    def __init__(self, num_occupants, material, setup_time, sqft, vestibule, weight, structure_poles=True, seasons=3):
+        super().__init__(num_occupants, material, setup_time, weight, seasons)
+        self.sqft = sqft
+        self.vestibule = vestibule
+        self.structure_poles = structure_poles
+
+    #Initializes Tent Attributes
+    def __str__(self) -> str:
+        return f"Shelter({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, {self.vestibule}, " \
+               f"{self.weight}, {self.structure_poles}, {self.seasons})"
+
+
+class Hammock(Shelter):
+    def __init__(self, num_occupants, material, setup_time, weight, length=11, seasons=3):
+        super().__init__(num_occupants, material, setup_time, weight, seasons)
+        self.length = length
+
+    def __str__(self) -> str:
+        return f"Shelter({self.num_occupants}, {self.material}, {self.setup_time}, {self.weight}, {self.length}, {self.seasons})"
+
+
+class Tarp(Shelter):
+    #Tarp Class Extends the Shelter Class
+    #Inherits from Shelter
+
+    #Initializes Tarp Object
+    def __init__(self, num_occupants, material, setup_time, sqft, weight, seasons=3):
+        super().__init__(num_occupants, material, setup_time, weight, seasons)
+        self.sqft = sqft
+
+    #Initializes Tarp Attributes
+    def __str__(self) -> str:
+        return f"Shelter({self.num_occupants}, {self.material}, {self.setup_time}, {self.sqft}, {self.weight}, {self.seasons})"
