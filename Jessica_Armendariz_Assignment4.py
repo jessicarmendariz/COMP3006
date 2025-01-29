@@ -122,12 +122,15 @@ column are :
 #Upload
 #Please ZIP the Assignment4 folder containing the Assigment4.py, test_assignment4.py and your data files and upload to Canvas.
 
-   
+import csv
+from collections import defaultdict, Counter, namedtuple
+
+#Initialize the Dictionary with a Lambda Function and Return a Dictionary with a List
 class Records:
     #DOCSTRING
     def __init__(self, file_name, file_title):
-        self.file_name = file_name
-        self.file_title = file_title
+        self.record_dict = defaultdict(lambda: defaultdict(list))
+        self.load_data(file_name, file_title)
 
     def __str__(self):
         pass
@@ -135,26 +138,55 @@ class Records:
     def __repr__(self):
         pass
 
-    def load_data():
-        pass
+    #Load CSV File into Dictionary
+    def load_data(self, file_name, file_title):
+        while True:
+            try:
+                with open(file_name, mode='r', encoding='utf-8') as file:
+                    reader = csv.DictReader(file)
+                    headers = next(reader)
+                    Entry = self._create_container(headers)
 
-    def _create_container():
-        pass
+                    self.record_dict[file_title]['data'] = [Entry(*row) for row in reader]
+                    print(f"File {file_name} Loaded Successfully.")
+                    break
+            except FileNotFoundError:
+                file_name = input("File Not Found. Please Enter a Valid File Name or 'q' to Quit: ")
+                if file_name.lower() == 'q':
+                    break
+            except InvalidColumnNames as e:
+                print(e.msg)
+                headers = input("Enter Valid Column Names Separated By Commas: ").split(',')
+                Entry = self._create_container(headers)
 
-    def _standardize_col_names():
-        pass
+    def _create_container(self, headers):
+        standardized_headers = self._standardize_col_names(headers)
+        return namedtuple("Entry", standardized_headers)
+    
+    def _standardize_col_names(self, headers):
+        standardized_headers = [col.replace("_", "").replace("-", "") for col in headers]
+        if not all(col.isalnum() for col in standardized_headers):
+            raise InvalidColumnNames(headers)
+        return standardized_headers
 
-    def record_stats():
-        pass
+    def record_stats(self, file_title, column_name, extract_func):
+        values = map(extract_func, self.record_dict[file_title]['data'])
+        self.record_dict[file_title][f'stats_{column_name}'] = Counter(values)
 
-    def extract_top_n():
-        pass
+    def extract_top_n(self, n, file_title, stats_column_name):
+        try:
+            return self.record_dict[file_title][stats_column_name].most_common(n)
+        except KeyError:
+            raise NoRecordStatsFound(stats_column_name)
 
 
-class InvalidColumnNames:
+class InvalidColumnNames(Exception):
     #DOCSTRING
-    def __init__(self):
-        pass
+    def __init__(self, column_names):
+        self.col_names = column_names
+        self.msg = f"OInvalid Column Names: {column_names}. Please Enter Valid Column Names."
+        print(self.msg)
+        super().__init__(self.msg)
     
     def __str__(self):
         pass
@@ -164,11 +196,25 @@ class InvalidColumnNames:
 
 class NoRecordStatsFound:
     #DOCSTRING
-    def __init__(self):
-        pass
+    def __init__(self, stats_column_name):
+        self.column_name = stats_column_name
+        self.msg = f"No Record Stats Found For {stats_column_name}. Please Enter A Different Stats Column Name or 'q' to Quit."
+        print(self.msg)
+        super().__init__(self.msg)
     
     def __str__(self):
         pass
 
     def __repr__(self):
         pass
+
+
+if __name__ == "__main__":
+    credit_card_records = Records("credit_card_data.csv", "Credit Card")
+    complaints_records = Records("complaints_data.csv", "Complaints")
+
+    credit_card_records.record_stats("Credit Card", "Period", lambda x: x.Period)
+    complaints_records.record_stats("Complaints", "Product", lambda x: x.Product)
+
+    print(credit_card_records.record_dict)
+    print(complaints_records.record_dict)
