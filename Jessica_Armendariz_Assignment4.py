@@ -85,8 +85,7 @@ column are :
 ('Checking or savings account', 3663),
 ('Mortgage', 1885),
 ('Student loan', 1144),
-('Money transfer, virtual currency, or money service', 1083),
-3
+('Money transfer, virtual currency, or money service', 1083), 
 ('Vehicle loan or lease', 920),
 ('Payday loan, title loan, personal loan, or advance loan', 533),
 ('Prepaid card', 511)]
