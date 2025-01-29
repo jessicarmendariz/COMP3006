@@ -52,16 +52,19 @@ defaultdict(<function <lambda> at 0x108b985e0>,
 #It must make a call to _standardize_col_names method described below.
 #You must then unpack the column names to create a namedtuple called Entry that will have the column names as the names of the attributes. 
 #Return the Entry namedtuple.
+                 
 #• _standardize_col_names - Method takes list of column names and replaces “_”, “-“ and blank spaces with an empty string, you can use str.replace method to do this. 
 #After standardizing the column names, check that all column names are alpha-numeric (meaning it’s only letters and numbers). 
 #If the column names are not alpha-numeric, you must raise a custom exception called InvalidColumnNames described below in Step 2. 
 #You must pass the column names to the exception and your “except” statement should print the msg attribute of the InvalidColumnNames exception class and ask the user to input the names of the columns by hand. 
 #Return the standardized columns list.
+                 
 #• record_stats - Method takes the file_title, a column name you wish to process and a lambda function, as arguments. 
 #You will need to retrieve the values for the given column in the appropriate data list using the lambda function that was passed in and the map method. 
 #Once you have extracted the values use a Counter object to summarize the number of instances in that column.
 #This should give you a Counter object that pairs the value in the column with the number of times that value appeared in your data. 
 #Store the result inside of the appropriate file_title dictionary using “stats_column_name” as the key (this should also be done dynamically).
+                 
 #• extract_top_n - Method takes an integer, file_title and a stats_column_name a arguments. 
 #It must return the top n most frequent values for the Counter object created by the record_stats method for the given column, where n is the integer that was passed into the function. 
 #If the stats_column_name doesn’t exist, you must raise a custom NoRecordStatsFound exception described below. 
