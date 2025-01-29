@@ -164,3 +164,49 @@
 
 
 #January 28 - Week 4 - Day 7
+
+#Homework 4 - will need multiple modules for the assignment and the testing
+#How many unit tests are needed? 
+    #Keeping guidelines fuzzy so that we have to figure it out alone.
+
+
+from collections import defaultdict, namedtuple
+
+#Default Dictionary Example
+# defaultdict(
+#     'Credit Card': {defaultdict
+#         'data': [],
+#         'stats_Period': []}
+
+#     'Complaints': {defaultdict
+#         'data': [],
+#         'stats_Product': []
+#     })
+
+# #Named Tuples
+# phone = namedtuple("Phone", ['cell', 'home'])
+# p_test = phone('1234567890', '0987654321')
+# print(p_test.cell)
+
+# contact = namedtuple("Contact", ['phone', 'email', 'address'])
+# c_test = contact(p_test, 'abc@gmail.com', '123 Street Rd')
+# print(c_test)
+
+# person = namedtuple('Person', ['first', 'last', 'contact', 'age'])
+# person_test = person('Jessica', 'Armendariz', c_test, '33')
+# print(person_test)
+
+# print(person_test.last)
+# print(person_test.first, person_test.last)
+# print(person_test.contact.email, person_test.contact.address)
+# print(person_test.last, person_test.contact.phone.home, person_test.contact.phone.cell)
+
+
+# def userProfile():
+#     pass
+
+
+
+
+
+#January 30 - Week 4 - Day 8
