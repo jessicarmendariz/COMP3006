@@ -13,31 +13,60 @@
 #Note you will need to execute the record_stats method with the column that you want to test.
 #Every function will have a print statement that will print the message : “Executing test_name.” where test_name is the name of the current test being executed.
 
-
 import unittest
+from Assignment4 import Records, InvalidColumnNames, NoRecordStatsFound
 
 class TestCollections(unittest.TestCase):
     #DOCSTRING
-    def setUpClass():
-        pass
+    @classmethod
+    def setUpClass(cls):
+        print("setUpClass")
+        cls.records = Records("credit_card_data.csv", "Credit Card")
+        cls.records.load_data("complaints_data.csv", "Complaints")
 
-    def tearDownClass():
-        pass
+    @classmethod
+    def tearDownClass(cls):
+        print("tearDownClass")
+        del cls.records
 
-    def setUp():
-        pass
-    #print("setUp")
+    def setUp(self):
+        print("setUp")
 
-    def tearDown():
-        pass
-    #print("tearDown")
+    def tearDown(self):
+        print("tearDown")
 
-    def test_create_container():
-        pass
+    def test_create_container(self):
+        print("Executing test_create_container.")
+        valid_headers = ["Column1", "Column2", "Column3"]
+        invalid_headers = ["Column 1", "Column@2", "Column#3"]
 
-    def test_record_stats():
-        pass
+        Entry = self.records._create_container(valid_headers)
+        self.assertEqual(Entry._fields, tuple(valid_headers))
 
-    def test_extract_top_n():
-        pass
+        with self.assertRaises(InvalidColumnNames):
+            self.records._create_container(invalid_headers)
 
+    def test_record_stats(self):
+        print("Executing test_record_stats.")
+        self.records.record_stats("Credit Card", "Period", lambda x: x.Period)
+        self.records.record_stats("Complaints", "Product", lambda x: x.Product)
+
+        self.assertIn("stats_Period", self.records.record_dict["Credit Card"])
+        self.asserIn("stats_Product", self.records.record_dict["Complaints"])
+
+    def test_extract_top_n(self):
+        print("Executing test_exract_top_n.")
+        self.records.record_stats("Credit Card", "Period", lambda x: x.Period)
+        self.records.record_stats("Complaints", "Product", lambda x: x.Product)
+
+        top_10_periods = self.records.extract_top_n(10, "Credit Card", "stats_Period")
+        top_10_products = self.records.extract_top_n(10, "Complaints", "stats_Product")
+
+        self.assertIsInstance(top_10_periods, list)
+        self.assertIsInstance(top_10_products, list)
+
+        with self.assertRaises(NoRecordStatsFound):
+            self.records.extract_top_n(5, "Credit Card", "stats_NonExistent")
+
+if __name__ == "__main__":
+    unittest.main()
