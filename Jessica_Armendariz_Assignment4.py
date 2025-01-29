@@ -121,3 +121,54 @@ column are :
 
 #Upload
 #Please ZIP the Assignment4 folder containing the Assigment4.py, test_assignment4.py and your data files and upload to Canvas.
+
+   
+class Records:
+    #DOCSTRING
+    def __init__(self, file_name, file_title):
+        self.file_name = file_name
+        self.file_title = file_title
+
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
+
+    def load_data():
+        pass
+
+    def _create_container():
+        pass
+
+    def _standardize_col_names():
+        pass
+
+    def record_stats():
+        pass
+
+    def extract_top_n():
+        pass
+
+
+class InvalidColumnNames:
+    #DOCSTRING
+    def __init__(self):
+        pass
+    
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
+
+class NoRecordStatsFound:
+    #DOCSTRING
+    def __init__(self):
+        pass
+    
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
