@@ -210,3 +210,13 @@ from collections import defaultdict, namedtuple
 
 
 #January 30 - Week 4 - Day 8
+#record_dict is an attribute in init, not a method
+#create container returns the entry named tuple, first line of the file
+
+
+
+
+
+#February 4 - Week 5 - Day 9
+
+
