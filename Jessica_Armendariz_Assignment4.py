@@ -124,97 +124,121 @@ column are :
 
 import csv
 from collections import defaultdict, Counter, namedtuple
+import re
 
-#Initialize the Dictionary with a Lambda Function and Return a Dictionary with a List
+#Class Loads and Processes the CSV files, Stores Data in the Default Dictionary, Cleans and Standardizes Column Names
 class Records:
-    #DOCSTRING
-    def __init__(self, file_name, file_title):
-        self.record_dict = defaultdict(lambda: defaultdict(list))
-        self.load_data(file_name, file_title)
+    #Initializes the Records Instance and Loads Data from the CSV Files
+    #Contains 6 Methods: __init__, load_data, _create_container, _standardize_col_names, record_stats, and extract_top_n
+    def __init__(self, file_name="", file_title=""):
+        self.file_name = file_name
+        self.file_title = file_title
 
-    def __str__(self):
-        pass
+        #Creates the Required Default Dictionary
+        self.record_dict = defaultdict(lambda: defaultdict(list),
+        {
+           'credit card': defaultdict(list,
+                  {
+                    'data': [],
+                    'stats_period': Counter()
+                  }),
+           'complaints': defaultdict(list,
+                  {
+                    'data': [],
+                    'stats_product': Counter()
+                  }),
+        })
+        if self.file_name and self.file_title:
+            self.load_data(self.file_name, self.file_title)
 
-    def __repr__(self):
-        pass
-
-    #Load CSV File into Dictionary
+    #Load credit_card.csv and customer_complaints.csv into Dictionary
     def load_data(self, file_name, file_title):
+        #Reads the CSV File, Creates a NamedTuple, and Loads All Rows into the Dictionary as NamedTuples
+        #Finds the Invalid Column Names and Prompts User for the Corrected Names
         while True:
             try:
-                with open(file_name, mode='r', encoding='utf-8') as file:
-                    reader = csv.DictReader(file)
+                with open(file_name, mode='r') as file:
+                    reader = csv.reader(file)
                     headers = next(reader)
                     Entry = self._create_container(headers)
-
-                    self.record_dict[file_title]['data'] = [Entry(*row) for row in reader]
+                    self.record_dict[file_title]['data'] = [Entry(*row) for row in reader]  
                     print(f"File {file_name} Loaded Successfully.")
-                    break
+                break  
+
             except FileNotFoundError:
-                file_name = input("File Not Found. Please Enter a Valid File Name or 'q' to Quit: ")
+                file_name = input("File Not Found. Enter a Valid File Name or 'q' to Quit: ")
                 if file_name.lower() == 'q':
                     break
+
             except InvalidColumnNames as e:
                 print(e.msg)
                 headers = input("Enter Valid Column Names Separated By Commas: ").split(',')
                 Entry = self._create_container(headers)
 
     def _create_container(self, headers):
+        #Creates a NamedTuples using Standardized Column Headers
         standardized_headers = self._standardize_col_names(headers)
         return namedtuple("Entry", standardized_headers)
-    
+
     def _standardize_col_names(self, headers):
-        standardized_headers = [col.replace("_", "").replace("-", "") for col in headers]
-        if not all(col.isalnum() for col in standardized_headers):
-            raise InvalidColumnNames(headers)
+        #Fixes ALL Column Names by Replacing the Spaces and Dashes with Underscores
+        #Removes ALL Special Characters and Covnverts Data to Lowercase
+        standardized_headers = []
+        for col in headers:
+            clean_col = col.strip().replace(" ", "_").replace("-", "_")
+            clean_col = re.sub(r'[^a-zA-Z0-9_]', '', clean_col)
+            clean_col = clean_col.lower()
+            standardized_headers.append(clean_col)
         return standardized_headers
 
     def record_stats(self, file_title, column_name, extract_func):
-        values = map(extract_func, self.record_dict[file_title]['data'])
+        #Checks if Data Exists, Standardizes Column Names, Uses Counters to Count Occurances
+        #Stores Results in the Dictionary
+        if not self.record_dict[file_title]['data']:
+            raise ValueError(f"No data found in {file_title}.")
+        standardized_column_name = column_name.strip().replace(" ", "_").replace("-", "_").lower()
+        if standardized_column_name not in self.record_dict[file_title]['data'][0]._fields:
+            raise KeyError(f"Column '{column_name}' not found in {file_title}")
+        values = list(map(extract_func, self.record_dict[file_title]['data']))
         self.record_dict[file_title][f'stats_{column_name}'] = Counter(values)
 
     def extract_top_n(self, n, file_title, stats_column_name):
-        try:
-            return self.record_dict[file_title][stats_column_name].most_common(n)
-        except KeyError:
+        #Extracts the Top N Most Common Values
+        stats_key = f'stats_{stats_column_name}'
+        if stats_key not in self.record_dict[file_title]:
             raise NoRecordStatsFound(stats_column_name)
+        return self.record_dict[file_title][stats_key].most_common(n)
 
-
+#Handles Column Name Exceptions
 class InvalidColumnNames(Exception):
-    #DOCSTRING
     def __init__(self, column_names):
         self.col_names = column_names
-        self.msg = f"OInvalid Column Names: {column_names}. Please Enter Valid Column Names."
-        print(self.msg)
+        self.msg = f"Invalid Column Names: {column_names}. Please Enter Valid Column Names."
         super().__init__(self.msg)
-    
-    def __str__(self):
-        pass
 
-    def __repr__(self):
-        pass
-
-class NoRecordStatsFound:
-    #DOCSTRING
+#Handles Non Existent Records
+class NoRecordStatsFound(Exception):    
     def __init__(self, stats_column_name):
         self.column_name = stats_column_name
-        self.msg = f"No Record Stats Found For {stats_column_name}. Please Enter A Different Stats Column Name or 'q' to Quit."
-        print(self.msg)
+        self.msg = f"No Record Stats Found For {stats_column_name}. Enter a Different Stats Column Name or 'q' to Quit."
         super().__init__(self.msg)
-    
-    def __str__(self):
-        pass
 
-    def __repr__(self):
-        pass
+
+def main():
+    #Creates Required Outputs
+    credit_card_records = Records("credit_card.csv", "credit card")
+    complaints_records = Records("customer_complaints.csv", "complaints")
+    credit_card_records.record_stats("credit card", "Period", lambda x: x.period)
+    complaints_records.record_stats("complaints", "Product", lambda x: x.product)
+    top_10_credit = credit_card_records.extract_top_n(10, "credit card", "Period")
+    top_10_complaints = complaints_records.extract_top_n(10, "complaints", "Product")
+
+    #Print Results
+    print("\nFor the credit card file, the 10 most common values in the Period column are:")
+    print(top_10_credit)
+    print("\nFor the customer complaints file, the 10 most common values in the Product column are:")
+    print(top_10_complaints)
 
 
 if __name__ == "__main__":
-    credit_card_records = Records("credit_card_data.csv", "Credit Card")
-    complaints_records = Records("complaints_data.csv", "Complaints")
-
-    credit_card_records.record_stats("Credit Card", "Period", lambda x: x.Period)
-    complaints_records.record_stats("Complaints", "Product", lambda x: x.Product)
-
-    print(credit_card_records.record_dict)
-    print(complaints_records.record_dict)
+    main()
