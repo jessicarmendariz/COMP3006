@@ -15,58 +15,85 @@
 
 import unittest
 from Assignment4 import Records, InvalidColumnNames, NoRecordStatsFound
+from collections import namedtuple, Counter
 
+#Loads Data, Cleans Up After Tests, Runs the SetUp adn TearDown, Tests the Functions
 class TestCollections(unittest.TestCase):
-    #DOCSTRING
+    #Runs Before All Tests
+    #Creates an Instance of Records
+    #Prints SetUpClass
     @classmethod
     def setUpClass(cls):
         print("setUpClass")
-        cls.records = Records("credit_card_data.csv", "Credit Card")
-        cls.records.load_data("complaints_data.csv", "Complaints")
+        cls.records = Records("credit_card.csv", "Credit Card")
+        cls.records.load_data("customer_complaints.csv", "Complaints")
 
+    #Runs Before All Tests
+    #Deletes Records Instance
+    #Prints TearDownClass
     @classmethod
     def tearDownClass(cls):
         print("tearDownClass")
         del cls.records
 
+    #Runs Before Each Test
     def setUp(self):
         print("setUp")
 
+    #Runs After Each Test
     def tearDown(self):
         print("tearDown")
 
+    #Tests Create Container and Creates Test Headers (1 & 2)
+    #Tests Assertions and Errors
     def test_create_container(self):
         print("Executing test_create_container.")
-        valid_headers = ["Column1", "Column2", "Column3"]
-        invalid_headers = ["Column 1", "Column@2", "Column#3"]
+        headers1 = ["Transaction_ID", "Amount", "Date"]
+        headers2 = ["Product", "Category", "Complaint"]
 
-        Entry = self.records._create_container(valid_headers)
-        self.assertEqual(Entry._fields, tuple(valid_headers))
+        Entry1 = self.records._create_container(headers1)
+        Entry2 = self.records._create_container(headers2)
 
+        self.assertTrue(issubclass(Entry1, tuple))
+        self.assertTrue(issubclass(Entry2, tuple))
+        self.assertEqual(Entry1._fields, ("transactionid", "amount", "date"))
+        self.assertEqual(Entry2._fields, ("product", "category", "complaint"))
         with self.assertRaises(InvalidColumnNames):
-            self.records._create_container(invalid_headers)
+            self.records._create_container(["ValidName", "Invalid@Name", "123"])
 
+    #Tests Assertions for Frequency Counts
     def test_record_stats(self):
         print("Executing test_record_stats.")
         self.records.record_stats("Credit Card", "Period", lambda x: x.Period)
+        
+        stats_key = "stats_Period"
+        self.assertIn(stats_key, self.records.record_dict["Credit Card"])
+        self.assertIsInstance(self.records.record_dict["Credit Card"][stats_key], Counter)
         self.records.record_stats("Complaints", "Product", lambda x: x.Product)
+        
+        stats_key = "stats_Product"
+        self.assertIn(stats_key, self.records.record_dict["Complaints"])
+        self.assertIsInstance(self.records.record_dict["Complaints"][stats_key], Counter)
 
-        self.assertIn("stats_Period", self.records.record_dict["Credit Card"])
-        self.asserIn("stats_Product", self.records.record_dict["Complaints"])
-
+    #Tests Extracting Top Period Values and Top Product Values
+    #Tests Assertions and Error Handling
     def test_extract_top_n(self):
-        print("Executing test_exract_top_n.")
+        print("Executing test_extract_top_n.")
+
         self.records.record_stats("Credit Card", "Period", lambda x: x.Period)
         self.records.record_stats("Complaints", "Product", lambda x: x.Product)
 
-        top_10_periods = self.records.extract_top_n(10, "Credit Card", "stats_Period")
-        top_10_products = self.records.extract_top_n(10, "Complaints", "stats_Product")
+        top_5_credit = self.records.extract_top_n(5, "Credit Card", "Period")
+        self.assertEqual(len(top_5_credit), 5)
+        self.assertIsInstance(top_5_credit, dict)
 
-        self.assertIsInstance(top_10_periods, list)
-        self.assertIsInstance(top_10_products, list)
+        top_3_complaints = self.records.extract_top_n(3, "Complaints", "Product")
+        self.assertEqual(len(top_3_complaints), 3)
+        self.assertIsInstance(top_3_complaints, dict)
 
         with self.assertRaises(NoRecordStatsFound):
-            self.records.extract_top_n(5, "Credit Card", "stats_NonExistent")
+            self.records.extract_top_n(3, "Credit Card", "NonExistentColumn")
 
+#Run Tests
 if __name__ == "__main__":
     unittest.main()
