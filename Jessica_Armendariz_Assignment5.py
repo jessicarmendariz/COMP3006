@@ -40,6 +40,7 @@
 
 #Real Estate dataset:
 #• https://www.kaggle.com/datasets/ahmedshahriarsakib/usa-real-estate-dataset
+
 #Step 1: load.py inside the load_data package.
 #In load.py implement a class called RealEstate. 
 #This class will contain the entire real estate data set. 
