@@ -217,6 +217,26 @@ from collections import defaultdict, namedtuple
 
 
 
-#February 4 - Week 5 - Day 9
+#February 4 - Week 5 - Day 9 (Did Not Attend Class)
 
 
+
+
+
+#February 6 - Week 5 - Day 10
+#———run.py #primary file that executes your code (module)
+#———real_estate: (package)
+#——————load_data: (package)
+#—————————load.py (module)
+#—————————data: (package)
+#————————————realtor-data.csv
+#——————helper_functions: (package)
+#—————————calculate_stats.py (module)
+#—————————context_manager.py (module)
+# This is the photo on Slack - on how to break this down
+
+
+
+
+
+#February 11 - Week 6 - Day 11
