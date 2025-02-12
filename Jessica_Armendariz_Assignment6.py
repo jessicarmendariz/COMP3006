@@ -39,6 +39,7 @@
 #Step 2: Convert the prototype Jupyter Notebook into a module
 #Jupyter notebooks are very helpful when you want to perform EDA and fast prototyping. 
 #Once you’ve analyzed your data and have a data pipeline, we can create a Python module that can be deployed to teammates or placed in a larger data pipeline.
+
 #In production.py implement a class called RealEstate2. 
 #This class will contain the entire real estate data set. 
 #The class must have the attribute properties_df.
