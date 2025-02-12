@@ -31,7 +31,8 @@
 #Real Estate dataset:
 #• https://www.kaggle.com/datasets/ahmedshahriarsakib/usa-real-estate-dataset
 
-#Step 1: Complete the questions in prototyping.ipynb Data Science revolves primarily around Exploratory Data Analysis (EDA) which consists of importing, visualizing and cleaning data. 
+#Step 1: Complete the questions in prototyping.ipynb 
+#Data Science revolves primarily around Exploratory Data Analysis (EDA) which consists of importing, visualizing and cleaning data. 
 #This is done in order to build a data pipeline which allows processing large amounts of data in a standardized way.
 #Any model that requires large amounts of data (which is just about everything these days), must have an efficient and robust data pipeline to help train said model.
 #The prototyping notebook will take you through some of the steps that are standard when exploring new data.
