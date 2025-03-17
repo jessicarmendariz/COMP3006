@@ -1,0 +1,5 @@
+1a. awk '{print $9}' Data.txt > T_DAILY_AVG.txt
+
+1b. sort -n T_DAILY_AVG.txt > T_DAILY_AVG_sorted.txt
+
+1c. awk '{print $9}' Data.txt | sort -n | python3 compute_stats.py > compute_stats_results.txt
